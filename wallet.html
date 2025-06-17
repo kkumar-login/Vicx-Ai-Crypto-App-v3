@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('image/bggg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .wallet-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-shadow: 0px 0px 10px #FFFFFF;
+            position: relative;
+            top: -20px;
+        }
+
+        .wallet-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            height: 78vh;
+            padding: 5px;
+            border-radius: 40px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .blur-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent);
+            border-radius: 30px 30px 0 0;
+            z-index: 1;
+        }
+
+        .seed-list-container {
+            width: 100%;
+            height: 360px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .bottom-image {
+            position: absolute;
+            bottom: 0;
+            width: 95%;
+            height: 100px;
+            opacity: 0.92;
+        }
+
+        .seed-list {
+            font-size: 16px;
+            font-weight: bold;
+            color: gray;
+            margin: 4px 0;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .extra-line {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: gray;
+            text-align: left;
+        }
+
+        .found-container {
+            border: 1px solid DimGray;
+            padding: 14px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 19px;
+            font-size: 17px;
+            font-weight: bold;
+            background: url('image/bn.jpg') no-repeat center center;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            margin-top: 10px;
+        }
+
+        .start {
+            background-image: url('image/button3.jpg');
+            background-size: cover;
+            color: black;
+        }
+
+        .stop {
+            background: black;
+            color: white;
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            background-color: black;
+            border-top-left-radius: 27px;
+            border-top-right-radius: 27px;
+            box-shadow: 0px -4px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .bottom-btn {
+            font-size: 25px;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .bottom-btn.active {
+            color: #FFFFFF;
+            text-shadow: 0px 0px 10px #FFFFFF;
+        }
+
+        /* Responsive design for PC */
+        @media (min-width: 768px) {
+            .wallet-container {
+                max-width: 900px;
+                height: 85vh;
+                padding: 20px;
+            }
+
+            .wallet-title {
+                font-size: 36px;
+                top: -30px;
+            }
+
+            .seed-list {
+                font-size: 20px;
+            }
+
+            .extra-line {
+                font-size: 22px;
+            }
+
+            .found-container {
+                font-size: 36px;
+            }
+
+            .toggle-btn {
+                font-size: 22px;
+                padding: 25px;
+            }
+
+            .bottom-bar {
+                padding: 25px 0;
+            }
+
+            .bottom-btn {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <h1 class="wallet-title">Wallet Search</h1>
+
+    <div class="wallet-container">
+        <div class="blur-effect"></div>
+
+        <div class="seed-list-container">
+            <div class="seed-list" id="seedContainer">
+                <p>Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                   Balance: 0 | Wallet check: seed rain sun van ab...</p>
+                                      
+                                      
+                                      
+                                      
+            </div>
+<img src="image/bottomimage.jpg" alt="bottom curve" class="bottom-image">
+        </div>
+
+        <div class="extra-line">Last Found</div>
+
+        <div class="oval-container"></div>
+
+        <div class="found-container">
+            <p class="text-sm text-gray-500">Wallets checked: <span id="walletCount">0</span></p>
+            <p class="text-lg font-semibold">Found: $<span id="foundAmount">0,00</span></p>
+        </div>
+
+        <button id="toggleBtn" class="toggle-btn start" onclick="toggleSearch()">START</button>
+    </div>  
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-bar">
+        <div class="blue-line"></div>
+        <i id="searchBtn" class="fas fa-search bottom-btn active"></i>
+        <i id="chartLineBtn" class="fas fa-chart-line bottom-btn"></i>
+        <i id="cogBtn" class="fas fa-cog bottom-btn"></i>
+        <i id="chatBtn" class="fas fa-comment-dots bottom-btn"></i>
+    </div>
+
+    <script>
+        let isRunning = false;
+        let interval;
+        let walletCount = 0;
+
+        const seedWords = [
+  "ace", "act", "ant", "apt", "ark", "art", // A
+  "bad", "bag", "ban", "bat", "bay", "bed", "bet", "big", "bin", "bit", "box", "bug", "bus", "but", // B
+  "cab", "can", "cap", "cat", "cop", "cot", "cow", "cry", "cup", "cut", // C
+  "dad", "dam", "day", "den", "dig", "dip", "dot", "dry", "dug", "dye", // D
+  "ear", "eat", "egg", "elf", "end", "era", "eye", // E
+  "fab", "fan", "far", "fat", "fax", "fig", "fin", "fix", "fun", // F
+  "gap", "gas", "gel", "gem", "get", "gig", "gin", "god", "got", "gum", "gun", // G
+  "had", "ham", "hat", "hay", "hen", "her", "hip", "hit", "hop", "hot", "hug", // H
+  "ice", "ill", "ink", "inn", "ion", "its", // I
+  "jam", "jar", "jaw", "jet", "jog", "joy", "jug", "jut", // J
+  "key", "kid", "kin", "kit", // K
+  "lab", "lad", "lag", "lap", "law", "lay", "led", "leg", "let", "lid", "lip", "log", "lot", "low", // L
+  "mad", "man", "map", "mat", "may", "men", "mix", "mob", "mom", "mud", "mug", // M
+  "nap", "net", "new", "nod", "nor", "not", "now", "nun", // N
+  "oak", "oar", "odd", "off", "oil", "old", "one", "opt", "orb", "our", "out", "owl", "own", // O
+  "pad", "pal", "pan", "pat", "pay", "pen", "pet", "pig", "pit", "pop", "pot", "pub", "pun", "put", // P
+  "quip", "qua", // Q (limited 3-letter words)
+  "rag", "ram", "ran", "rat", "red", "rib", "rid", "rig", "rim", "rip", "rob", "rod", "row", "rub", "rug", "run", // R
+  "sad", "saw", "say", "sea", "see", "set", "she", "shy", "sin", "sip", "sit", "six", "sky", "son", "sun", // S
+  "tab", "tag", "tan", "tap", "tax", "tea", "ten", "tie", "tip", "toe", "top", "toy", "try", "tug", // T
+  "urn", "use", "van", "vet", "via", "vie", // U & V
+  "war", "was", "way", "web", "wet", "who", "wig", "win", "wit", "won", "wow", // W
+  "yak", "yam", "yay", // Y
+  "zap", "zip", "zoo" // Z
+        ];
+
+        function updateSeeds() {
+            let list = "";
+            for (let i = 0; i < 90; i++) {
+                let phrase = Array(5).fill(null).map(() => seedWords[Math.floor(Math.random() * seedWords.length)]).join(" ");
+                list += `<p>Balance: 0 | Wallet check: ${phrase}..</p>`;
+            }
+            document.getElementById("seedContainer").innerHTML = list;
+            walletCount += 1;
+            document.getElementById("walletCount").innerText = walletCount.toLocaleString();
+        }
+
+        function toggleSearch() {
+            isRunning = !isRunning;
+            let btn = document.getElementById("toggleBtn");
+
+            if (isRunning) {
+                btn.classList.remove("start");
+                btn.classList.add("stop");
+                btn.innerHTML = "STOP";
+                interval = setInterval(updateSeeds, 30);
+            } else {
+                btn.classList.remove("stop");
+                btn.classList.add("start");
+                btn.innerHTML = "START";
+                clearInterval(interval);
+            }
+        }
+
+        document.querySelectorAll(".bottom-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
+                this.classList.add("active");
+
+                if (this.id === "searchBtn") {
+                    sessionStorage.setItem("activeTab", "search");
+                    window.location.href = "Blockchain.html";
+                } else if (this.id === "chartLineBtn") {
+                    sessionStorage.setItem("activeTab", "chart");
+                    window.location.href = "statistics.html";
+                } else if (this.id === "cogBtn") {
+                    sessionStorage.setItem("activeTab", "settings");
+                    window.location.href = "panel.html";
+                } else if (this.id === "chatBtn") {
+                    sessionStorage.setItem("activeTab", "chat");
+                    window.location.href = "support.html";
+                }
+            });
+        });
+
+        // Restore active tab from sessionStorage
+        window.addEventListener("load", function () {
+            const activeTab = sessionStorage.getItem("activeTab") || "search";
+            document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
+
+            if (activeTab === "search") {
+                document.getElementById("searchBtn").classList.add("active");
+            } else if (activeTab === "chart") {
+                document.getElementById("chartLineBtn").classList.add("active");
+            } else if (activeTab === "settings") {
+                document.querySelector("cogBtn").classList.add("active");
+            } else if (activeTab === "chat") {
+                document.querySelector("chatBtn").classList.add("active");
+            }
+        });
+    </script>
+
+</body>
+</html>

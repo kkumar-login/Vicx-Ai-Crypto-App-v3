@@ -1,0 +1,25 @@
+
+{
+  "name": "crypto-appv2",
+  "version": "1.0.0",
+  "description": "Crypto App Desktop Version",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "You",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.1.3",
+    "electron-builder": "^24.13.2"
+  },
+  "build": {
+    "appId": "com.crypto.app",
+    "productName": "Crypto AppV2",
+    "win": {
+      "target": "nsis"
+    }
+  }
+}

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Statistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0a0a0a, #111827);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 80px;
+      margin: 0;
+    }
+
+    .active-tab { color: white; }
+    .inactive-tab { color: #9ca3af; }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 15px 0;
+      background-color: black;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      box-shadow: 0 -2px 8px rgba(255, 255, 255, 0.1);
+      z-index: 40;
+    }
+
+    .bottom-btn {
+      font-size: 20px;
+      color: gray;
+      cursor: pointer;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .bottom-btn.active {
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffffff;
+    }
+
+    .dropdown-option:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+    /* Responsive for PC */
+    @media (min-width: 768px) {
+      body {
+        padding: 50px;
+      }
+
+      h1 {
+        font-size: 32px !important;
+      }
+
+      .tab-btn {
+        font-size: 20px !important;
+      }
+
+      #amount {
+        font-size: 28px !important;
+      }
+
+      .bottom-bar {
+        padding: 25px 0;
+      }
+
+      .bottom-btn {
+        font-size: 28px;
+      }
+
+      #dropdownButton {
+        font-size: 16px;
+        padding: 8px 16px;
+      }
+
+      canvas {
+        height: 400px !important;
+      }
+    }
+  </style>
+</head>
+<body class="p-4 min-h-screen flex flex-col justify-between max-w-sm mx-auto">
+
+  <div>
+    <h1 class="text-lg font-semibold mb-4 text-center">Statistics</h1>
+
+    <div class="flex justify-around mb-4 text-md">
+      <button class="tab-btn active-tab" data-type="today">Today</button>
+      <button class="tab-btn inactive-tab" data-type="week">Week</button>
+      <button class="tab-btn inactive-tab" data-type="month">Month</button>
+      <button class="tab-btn inactive-tab" data-type="all">All</button>
+    </div>
+
+    <div class="text-left mb-10 px-1">
+      <p id="amount-label" class="text-gray-400 text-sm">Amount found today</p>
+      <p id="amount" class="text-xl font-bold">$0.00</p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <div class="bg-black bg-opacity-40 rounded-xl p-4 w-full mx-auto overflow-x-auto">
+        <div class="flex justify-between items-center mb-2 text-xs">
+          <span class="text-gray-400">Stats by:</span>
+          <div class="relative">
+            <button id="dropdownButton" class="border border-black rounded px-2 py-1 text-xs flex items-center gap-1">
+              <span id="dropdownLabel">Mid value</span>
+              <span>▽</span>
+            </button>
+            <div id="dropdownMenu" class="absolute mt-2 bg-black text-white border border-gray rounded hidden z-10 w-28">
+              <div class="dropdown-option px-3 py-1 cursor-pointer">Mid value</div>
+              <div class="dropdown-option px-3 py-1 cursor-pointer">High value</div>
+              <div class="dropdown-option px-3 py-1 cursor-pointer">Low value</div>
+            </div>
+          </div>
+        </div>
+        <canvas id="chart" height="320"></canvas>
+      </div>
+    </div>
+
+    <div class="mt-6 px-1">
+      <p class="text-lg text-gray-400 mb-1">Last founded</p>
+      <div class="flex gap-2 overflow-x-auto"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="blue-line"></div>
+    <i id="searchBtn" class="fas fa-search bottom-btn"></i>
+    <i id="chartLineBtn" class="fas fa-chart-line bottom-btn"></i>
+    <i id="cogBtn" class="fas fa-cog bottom-btn"></i>
+    <i id="chatBtn" class="fas fa-comment-dots bottom-btn"></i>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('chart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+    gradient.addColorStop(0, '#cfd8dc');
+    gradient.addColorStop(1, '#263238');
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['1PM', '6PM', '12PM', '6AM', '12AM'],
+        datasets: [{
+          data: [0, 0, 0, 0, 0],
+          backgroundColor: gradient,
+          borderRadius: 10,
+          barThickness: 50
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: value => `$${value / 1000}k`,
+              color: '#aaa',
+              font: { size: 15 }
+            },
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            suggestedMin: 0,
+            suggestedMax: 6000
+          },
+          x: {
+            ticks: { color: '#aaa', font: { size: 10 } },
+            grid: { display: false }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    const stats = {
+      today: {
+        label: "Amount found today",
+        amount: "$0.00",
+        maxY: 6000,
+        data: {
+          Mid: [0, 0, 0, 0, 0],
+          High: [0, 0, 0, 0, 0],
+          Low: [0, 0, 0, 0, 0]
+        }
+      },
+      week: {
+        label: "Amount found this week",
+        amount: "$0.00",
+        maxY: 10000,
+        data: {
+          Mid: [0, 0, 0, 0, 0],
+          High: [0, 0, 0, 0, 0],
+          Low: [0, 0, 0, 0, 0]
+        }
+      },
+      month: {
+        label: "Amount found this month",
+        amount: "$0.00",
+        maxY: 25000,
+        data: {
+          Mid: [0, 0, 0, 0, 0],
+          High: [0, 0, 0, 0, 0],
+          Low: [0, 0, 0, 0, 0]
+        }
+      },
+      all: {
+        label: "Total amount found",
+        amount: "$0.00",
+        maxY: 1000000,
+        data: {
+          Mid: [0, 0, 0, 0, 0],
+          High: [0, 0, 0, 0, 0],
+          Low: [0, 0, 0, 0, 0]
+        }
+      }
+    };
+
+    let selectedTab = "today";
+    let selectedValue = "Mid";
+
+    const amountEl = document.getElementById('amount');
+    const amountLabelEl = document.getElementById('amount-label');
+
+    function updateChart() {
+      chart.data.datasets[0].data = stats[selectedTab].data[selectedValue];
+      chart.options.scales.y.suggestedMax = stats[selectedTab].maxY;
+      amountEl.textContent = stats[selectedTab].amount;
+      amountLabelEl.textContent = stats[selectedTab].label;
+      chart.update();
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab', 'border-b-2'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.add('inactive-tab'));
+        btn.classList.add('active-tab');
+        btn.classList.remove('inactive-tab');
+        selectedTab = btn.dataset.type;
+        updateChart();
+      });
+    });
+
+    const dropdownBtn = document.getElementById('dropdownButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const dropdownLabel = document.getElementById('dropdownLabel');
+    dropdownBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
+
+    document.querySelectorAll('.dropdown-option').forEach(option => {
+      option.addEventListener('click', () => {
+        selectedValue = option.textContent.split(' ')[0];
+        dropdownLabel.textContent = option.textContent;
+        dropdownMenu.classList.add('hidden');
+        updateChart();
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.classList.add('hidden');
+      }
+    });
+
+    // Bottom navigation logic
+    const buttons = document.querySelectorAll('.bottom-btn');
+    const activeBtnId = localStorage.getItem('activeBtn');
+
+    if (activeBtnId) {
+      document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    // Set default active icon on page load for statistics
+    const currentPage = window.location.href;
+    if (currentPage.includes('statistics.html')) {
+      document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('chartLineBtn').classList.add('active');
+      localStorage.setItem('activeBtn', 'chartLineBtn');
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        localStorage.setItem('activeBtn', btn.id);
+
+        if (btn.id === 'searchBtn') {
+          window.location.href = 'Blockchain.html';
+        } else if (btn.id === 'cogBtn') {
+          window.location.href = 'panel.html';
+        } else if (btn.id === 'chartLineBtn') {
+          window.location.href = 'statistics.html';
+        } else if (btn.id === 'chatBtn') {
+          window.location.href = 'support.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

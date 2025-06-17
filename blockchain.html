@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Blockchains</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('image/bgg.jpg');
+      background-size: cover;
+      background-position: center;
+      font-family: sans-serif;
+      color: white;
+    }
+
+    .blockchain-card {
+      transition: all 0.3s;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin: 15px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 17px;
+      border: 0px solid gray;
+    }
+
+    .blockchaincard-come {
+      transition: all 0.3s;
+      cursor: not-allowed;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin: 15px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 17px;
+      border: 0.1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0.5;
+      backdrop-filter: blur(4px);
+    }
+
+    .selection-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid gray;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .selected .selection-circle {
+      background-color: white;
+      border-color: white;
+    }
+
+    .selected .selection-circle::after {
+      content: '✓';
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .continue-container {
+      position: fixed;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 50;
+    }
+
+    .continue-btn {
+      background-image: url('image/button2.jpg');
+      background-size: cover;
+      background-position: center;
+      width: 95%;
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin: auto;
+      color: black;
+      cursor: pointer;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      background-color: black;
+      border-top-left-radius: 27px;
+      border-top-right-radius: 27px;
+      box-shadow: 0px -4px 10px rgba(255, 255, 255, 0.1);
+      z-index: 40;
+    }
+
+    .bottom-btn {
+      font-size: 25px;
+      color: gray;
+      cursor: pointer;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .bottom-btn.active {
+      color: #FFFFFF;
+      text-shadow: 0px 0px 10px #FFFFFF;
+    }
+
+    #loadingOverlay {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spinner {
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      border-top: 5px solid white;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive for PC */
+    @media (min-width: 768px) {
+      .blockchain-card {
+        padding: 20px;
+        font-size: 22px;
+      }
+
+      .blockchaincard-come {
+        padding: 20px;
+        font-size: 22px;
+      }
+
+      .selection-circle {
+        width: 30px;
+        height: 30px;
+      }
+
+      .continue-btn {
+        font-size: 22px;
+        padding: 25px;
+      }
+
+      .bottom-bar {
+        padding: 20px 0;
+      }
+
+      .bottom-btn {
+        font-size: 30px;
+      }
+
+      .spinner {
+        width: 100px;
+        height: 100px;
+        border: 6px solid rgba(255, 255, 255, 0.2);
+        border-top: 6px solid white;
+      }
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen flex flex-col justify-between">
+
+  <!-- Loading Spinner -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="p-4" id="mainContent" style="display:none;">
+    <h1 class="text-xl font-semibold text-center">Select blockchains <span id="selection-count" class="text-gray-400 text-base">0/6</span> <span class="text-gray-400 text-base">left</span></h1>
+
+    <div id="blockchain-list" class="mt-4 space-y-4">
+      <!-- Blockchain Cards -->
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/bitcoin_icon.png" class="w-8 h-8" alt="Bitcoin">
+          <span class="text-lg">Bitcoin <span class="text-gray-500 font-medium">BTC</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/ethereum_icon.png" class="w-8 h-8" alt="Ethereum">
+          <span class="text-lg">Ethereum <span class="text-gray-500 font-medium">ETH</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/binance_icon.png" class="w-8 h-8" alt="Binance">
+          <span class="text-lg">Binance Coin <span class="text-gray-500 font-medium">BNB</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/usdt-icon.png" class="w-8 h-8" alt="USDT">
+          <span class="text-lg">Tether USD <span class="text-gray-500 font-medium">USDT</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/solana-icon.png" class="w-8 h-8" alt="Solana">
+          <span class="text-lg">Solana <span class="text-gray-500 font-medium">SOL</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+
+      <div class="blockchain-card" onclick="toggleSelection(this)">
+        <div class="flex items-center space-x-3">
+          <img src="image/litecoin-icon.png" class="w-8 h-8" alt="Litecoin">
+          <span class="text-lg">Litecoin <span class="text-gray-500 font-medium">LTC</span></span>
+        </div>
+        <div class="selection-circle"></div>
+      </div>
+    </div>
+
+    <!-- Coming Soon -->
+    <h2 class="mt-8 text-lg font-semibold">Coming Blockchains</h2>
+    <div class="mt-4 space-y-4">
+      <div class="blockchaincard-come">
+        <div class="flex items-center space-x-3">
+          <img src="image/toncoin-icon.png" class="w-8 h-8" alt="Toncoin">
+          <span class="text-lg">Toncoin <span class="text-gray-500 font-medium">TON</span></span>
+        </div>
+      </div>
+
+      <div class="blockchaincard-come">
+        <div class="flex items-center space-x-3">
+          <img src="image/polygon-icon.png" class="w-8 h-8" alt="Polygon">
+          <span class="text-lg">Polygon <span class="text-gray-500 font-medium">MATIC</span></span>
+        </div>
+      </div>
+
+      <div class="blockchaincard-come">
+        <div class="flex items-center space-x-3">
+          <img src="image/avalance-icon.png" class="w-8 h-8" alt="Avalanche">
+          <span class="text-lg">Avalanche <span class="text-gray-500 font-medium">AVAX</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Continue Button -->
+  <div class="continue-container">
+    <button id="continue-btn" class="continue-btn text-black" disabled>Continue <i class="fas fa-arrow-right"></i></button>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-bar">
+    <div class="blue-line"></div>
+    <i class="fas fa-search bottom-btn"></i>
+    <i id="chartLineBtn" class="fas fa-chart-line bottom-btn"></i>
+    <i id="cogBtn" class="fas fa-cog bottom-btn"></i>
+    <i id="chatBtn" class="fas fa-comment-dots bottom-btn"></i>
+  </div>
+
+<script>
+    let selectedCount = 0;
+
+    function toggleSelection(element) {
+      let circle = element.querySelector(".selection-circle");
+      if (element.classList.contains("selected")) {
+        element.classList.remove("selected");
+        selectedCount--;
+      } else {
+        element.classList.add("selected");
+        selectedCount++;
+      }
+      document.getElementById("selection-count").innerText = `${selectedCount}/6`;
+      document.getElementById("continue-btn").disabled = selectedCount === 0;   
+    }
+
+    document.querySelectorAll(".bottom-btn").forEach(button => {
+      button.addEventListener("click", function() {
+        document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+
+        // Save active tab
+        if (this.classList.contains("fa-search")) {
+          sessionStorage.setItem("activeTab", "search");
+        } else if (this.id === "chartLineBtn") {
+          sessionStorage.setItem("activeTab", "chart");
+          window.location.href = "statistics.html";
+        } else if (this.id === "cogBtn") {
+          sessionStorage.setItem("activeTab", "settings");
+          window.location.href = "panel.html";
+        } else if (this.id === "chatBtn") {
+          sessionStorage.setItem("activeTab", "chat");
+          window.location.href = "support.html";
+        }
+      });
+    });
+
+    // Add event listener for the continue button
+    document.getElementById("continue-btn").addEventListener("click", function() {
+        window.location.href = "wallet.html";
+    });
+
+    window.onload = function () {
+      setTimeout(() => {
+        document.getElementById("loadingOverlay").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+
+        // Restore active tab
+        const activeTab = sessionStorage.getItem("activeTab") || "search";
+        document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
+
+        if (activeTab === "search") {
+          document.querySelector(".fa-search").classList.add("active");
+        } else if (activeTab === "chart") {
+          document.getElementById("chartLineBtn").classList.add("active");
+        } else if (activeTab === "settings") {
+          document.querySelector("cogBtn").classList.add("active");
+        } else if (activeTab === "chat") {
+          document.querySelector("chatBtn").classList.add("active");
+        }
+
+      }, 2000);
+    };
+</script>
+  
+</body>
+</html>

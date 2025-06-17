@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    .admin-panel {
+      background-image: url('/storage/emulated/0/Download/abg.jpg');
+      background-size: cover;
+      background-position: top;
+      padding: 20px;
+      height: 90vh;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    .wallet-info {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      text-align: left;
+      opacity: 0.9;
+      color: #888888;
+    }
+
+    .wallet-info p {
+      margin: 8px 0;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .wallet-info .label {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .seed-heading {
+      position: absolute;
+      bottom: 360px;
+      left: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      z-index: 10;
+    }
+
+    .seed-container {
+      position: absolute;
+      bottom: 20px;
+      width: 90%;
+      left: 5%;
+      background: transparent;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .seed-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .seed-item {
+      background: transparent;
+      border: 2px solid black;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .seed-item p {
+      font-size: 14px;
+      color: #aaa;
+      margin: 0;
+    }
+
+    .seed-item h3, .seed-item span {
+      margin: 5px 0;
+      font-size: 18px;
+    }
+
+    .crypto-type {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .crypto-type img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .copy-btn {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(to right, #d2e3ff, #eef5ff);
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* PC Responsive Design */
+    @media (min-width: 768px) {
+      .admin-panel {
+        height: auto;
+        padding: 50px;
+        background-position: center;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .wallet-info {
+        top: 80px;
+        left: 50px;
+      }
+
+      .wallet-info p {
+        font-size: 20px;
+      }
+
+      .seed-heading {
+        bottom: 400px;
+        left: 50px;
+        font-size: 24px;
+      }
+
+      .seed-container {
+        bottom: 50px;
+        width: 80%;
+        left: 10%;
+        padding: 30px;
+      }
+
+      .seed-item {
+        padding: 25px;
+      }
+
+      .seed-item p {
+        font-size: 18px;
+      }
+
+      .seed-item h3 {
+        font-size: 26px;
+      }
+
+      .copy-btn {
+        font-size: 20px;
+        padding: 25px;
+      }
+
+      .crypto-type img {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-panel">
+    <h1>Admin panel</h1>
+
+    <!-- Wallet Section -->
+    <div class="wallet-info">
+      <p class="label">Wallet</p>
+      <p>Wallets checked: 0</p>
+      <p>Last found</p>
+    </div>
+
+    <!-- Seed phrase label (outside container) -->
+    <div class="seed-heading">Seed phrase:</div>
+
+    <!-- Transparent Seed info container -->
+    <div class="seed-container">
+      <div class="seed-box">
+        <!-- USD Amount -->
+        <div class="seed-item">
+          <p>Found amount in USD</p>
+          <h3>$0,00</h3>
+        </div>
+
+        <!-- Crypto Amount -->
+        <div class="seed-item">
+          <p>Found amount in Crypto</p>
+          <h3>0.00</h3>
+        </div>
+
+        <!-- Crypto Type -->
+        <div class="seed-item crypto-type">
+          <div alt="Bitcoin" />
+          <span></span>
+        </div>
+      </div>
+      <button class="copy-btn">COPY THE SEED PHRASE</button>
+    </div>
+  </div>
+</body>
+</html>

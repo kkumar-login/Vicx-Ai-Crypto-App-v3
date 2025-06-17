@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      margin: 20px;
+      letter-spacing: 1px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 0 20px;
+      overflow-y: auto;
+      padding-bottom: 150px;
+    }
+
+    .copy-btn-wrapper {
+      position: fixed;
+      bottom: 80px;
+      width: 100%;
+      padding: 0 10px;
+      z-index: 99;
+    }
+
+    .copy-btn {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(to right, #d2e3ff, #eef5ff);
+      color: black;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .radio-container {
+      --main-color: #FFFFFF;
+      --main-color-opacity: #f7e4791c;
+      --total-radio: 3;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-left: 0.5rem;
+      margin-left: 10px;
+      margin-top: 10px;
+      width: max-content;
+      height: 170px;
+    }
+
+    .radio-container input { cursor: pointer; appearance: none; }
+
+    .radio-container .glider-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(27, 27, 27, 1) 50%, rgba(0, 0, 0, 0) 100%);
+      width: 1px;
+    }
+
+    .radio-container .glider-container .glider {
+      position: relative;
+      height: calc(100% / var(--total-radio));
+      width: 100%;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, var(--main-color) 50%, rgba(0, 0, 0, 0) 100%);
+      transition: transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56);
+    }
+
+    .radio-container label {
+      cursor: pointer;
+      padding: 1rem;
+      position: relative;
+      color: grey;
+      transition: all 0.3s ease-in-out;
+      font-size: 16px;
+    }
+
+    .radio-container input:checked + label { color: var(--main-color); }
+
+    .radio-container input:nth-of-type(1):checked ~ .glider-container .glider { transform: translateY(0); }
+    .radio-container input:nth-of-type(2):checked ~ .glider-container .glider { transform: translateY(100%); }
+    .radio-container input:nth-of-type(3):checked ~ .glider-container .glider { transform: translateY(200%); }
+
+    .answer {
+      color: #808080;
+      font-size: 14px;
+      padding: 0 1rem 1rem 1rem;
+      display: none;
+      max-width: 300px;
+    }
+
+    .answer.show { display: block; }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      background-color: black;
+      border-top-left-radius: 27px;
+      border-top-right-radius: 27px;
+      box-shadow: 0px -4px 10px rgba(255, 255, 255, 0.1);
+      z-index: 90;
+    }
+
+    .bottom-btn {
+      font-size: 25px;
+      color: gray;
+      cursor: pointer;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .bottom-btn.active {
+      color: #FFFFFF;
+      text-shadow: 0px 0px 10px #FFFFFF;
+    }
+
+    /* PC Responsive Design */
+    @media (min-width: 768px) {
+      h1, h2 { font-size: 32px; }
+
+      .radio-container {
+        margin-left: 30px;
+        margin-top: 30px;
+        height: 240px;
+      }
+
+      .radio-container label { font-size: 22px; }
+
+      .answer { font-size: 18px; max-width: 700px; }
+
+      .copy-btn { font-size: 20px; padding: 25px; }
+
+      .bottom-bar { padding: 25px 0; }
+
+      .bottom-btn { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>Support</h1>
+    <h2>F.A.Q.</h2>
+
+    <div class="radio-container" id="faq-container">
+      <input id="q1" name="faq" type="radio" onclick="showAnswer(1)">
+      <label for="q1">How does Crypto Mining App work?</label>
+      <div id="answer1" class="answer">
+        Our app uses advanced algorithms to generate and scan millions of 12-word mnemonic phrases to find wallets with crypto (BTC, ETH, USDT, LTC, SOL, BNB). Once a wallet with a balance is found, it provides you with the exact recovery phrase. You can then log into the wallet using apps like Trust Wallet or MetaMask and transfer the funds to your personal wallet or exchange.
+      </div>
+
+      <input id="q2" name="faq" type="radio" onclick="showAnswer(2)">
+      <label for="q2">Is it legal?</label>
+      <div id="answer2" class="answer">
+        Yes it’s fully legal!<br><br>
+        Firstly, most wallets you’ll find is lost, so definitely has no owner in case person forgot/lost his mnemonic phase. Also crypto is decentralized so you can’t know who is withdrawing and receiving money from wallets, so it’s completely unreal to be illegal, it’s just can’t be controlled.
+      </div>
+
+      <input id="q3" name="faq" type="radio" onclick="showAnswer(3)">
+      <label for="q3">How much will I earn per day?</label>
+      <div id="answer3" class="answer">
+        Based on our clients' experience, earnings vary from $1.5k to $2k per month with one blockchain.<br><br>
+        Using multiple blockchains, some users report up to $10k-$15k per month, and in some cases even up to $100k.
+      </div>
+
+      <div class="glider-container">
+        <div class="glider"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Button Above Bottom Bar -->
+  <div class="copy-btn-wrapper">
+    <a href="https://t.me/lostmining" target="_blank">
+      <button class="copy-btn">CONTACT SUPPORT</button>
+    </a>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-bar">
+    <div class="blue-line"></div>
+    <i class="fas fa-search bottom-btn" data-link="blockchain.html" onclick="setActive(this)"></i>
+    <i class="fas fa-chart-line bottom-btn" data-link="statistics.html" onclick="setActive(this)"></i>
+    <i class="fas fa-cog bottom-btn" data-link="panel.html" onclick="setActive(this)"></i>
+    <i class="fas fa-comment-dots bottom-btn active" onclick="setActive(this)"></i> <!-- Current Page -->
+  </div>
+
+  <script>
+    function showAnswer(num) {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('answer' + i).classList.remove('show');
+      }
+      document.getElementById('answer' + num).classList.add('show');
+    }
+
+    document.addEventListener('click', function (e) {
+      const faq = document.getElementById('faq-container');
+      if (!faq.contains(e.target)) {
+        for (let i = 1; i <= 3; i++) {
+          document.getElementById('answer' + i).classList.remove('show');
+        }
+        faq.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      }
+    });
+
+    function setActive(el) {
+      document.querySelectorAll('.bottom-btn').forEach(btn => btn.classList.remove('active'));
+      el.classList.add('active');
+
+      const link = el.getAttribute('data-link');
+      if (link) {
+        window.location.href = link;
+      }
+    }
+  </script>
+</body>
+</html>
